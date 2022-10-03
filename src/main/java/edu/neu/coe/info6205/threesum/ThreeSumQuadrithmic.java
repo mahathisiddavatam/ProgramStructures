@@ -40,6 +40,18 @@ class ThreeSumQuadrithmic implements ThreeSum {
         if (index >= 0 && index > j) return new Triple(a[i], a[j], a[index]);
         else return null;
     }
+    
+public static void main(String args[]) {
+    	
+    	int[] a = {30,-40,-20,-10,40,0,10,5};
+    	Arrays.sort(a);
+    	
+    	ThreeSumQuadrithmic target = new ThreeSumQuadrithmic(a);
+    	Triple[] trip = target.getTriples();
+    	for(Triple tri: trip) {
+    		System.out.println(tri);
+    	}
+    }
 
     private final int[] a;
     private final int length;

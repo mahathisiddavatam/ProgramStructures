@@ -45,6 +45,7 @@ public class ThreeSumTest {
         ThreeSum target = new ThreeSumQuadratic(ints);
         Triple[] triples = target.getTriples();
         System.out.println("triples: " + Arrays.toString(triples));
+        System.out.println(triples.length);
         assertEquals(4, triples.length);
         assertEquals(4, new ThreeSumCubic(ints).getTriples().length);
     }
