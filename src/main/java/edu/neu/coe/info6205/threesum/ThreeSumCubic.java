@@ -1,8 +1,14 @@
 package edu.neu.coe.info6205.threesum;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
+
+import edu.neu.coe.info6205.util.Stopwatch;
 
 /**
  * Implementation of ThreeSum which follows the brute-force approach of
@@ -33,6 +39,33 @@ class ThreeSumCubic implements ThreeSum {
         Collections.sort(triples);
         return triples.stream().distinct().toArray(Triple[]::new);
     }
+    
+    public static void main(String args[]) {
+    	
+    	Scanner scanner = null;
+    	try {
+    		scanner = new Scanner(new File("src/main/resources/nums8000"));
+    	} catch (FileNotFoundException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
+    	int [] nums = new int [8000];
+    	int i = 0;
+    	while(scanner.hasNextInt())
+    	{
+    	  nums[i++] = scanner.nextInt();
+    	}
+
+    	try (Stopwatch watch = new Stopwatch()) {
+    		Arrays.sort(nums);
+    		ThreeSumCubic target = new ThreeSumCubic(nums);
+    		Triple[] triples = target.getTriples();
+    		long time = watch.lap();
+    		System.out.println("N=8000");
+    		System.out.println("Time taken:"+time+"ms");
+    	}
+    	
+        }
 
     private final int[] a;
     private final int length;

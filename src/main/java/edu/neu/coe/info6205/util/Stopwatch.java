@@ -25,7 +25,7 @@ public class Stopwatch implements AutoCloseable {
         assert start != null : "Stopwatch is closed";
         final long lapStart = start;
         start = System.nanoTime();
-        return (start - lapStart) / 1000000;
+        return (start - lapStart)/1000000;
     }
 
     /**

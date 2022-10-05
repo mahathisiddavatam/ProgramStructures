@@ -33,7 +33,62 @@ public class ThreeSumBenchmark {
     }
 
     private void benchmarkThreeSum(final String description, final Consumer<int[]> function, int n, final TimeLogger[] timeLoggers) {
-        if (description.equals("ThreeSumCubic") && n > 4000) return;
+        if (description.equals("ThreeSumCubic") && n > 4000) {
+        	return;
+        }
+        else if(description.equals("ThreeSumCubic")) {
+        	int count=0;
+        	
+        	System.out.println(description);
+        	for(TimeLogger t: timeLoggersCubic ) {
+        		
+        		t.log(time, null);
+        		
+        		
+        		
+        	
+        		
+        		
+        		
+        		
+        		
+        		
+        	}
+        }
+        
+        if (description.equals("ThreeSumQuadratic")) {
+        	
+        	System.out.println(description);
+        	for(TimeLogger t: timeLoggersQuadratic ) {
+        		
+        		t.toString();
+        		
+        		
+        	}
+        	
+        	
+        }
+        
+        if (description.equals("ThreeSumQuadrithmic")) {
+        	
+        	System.out.println(description);
+        	for(TimeLogger t: timeLoggersQuadrithmic ) {
+        		
+        		t.toString();
+        		
+        		
+        	}
+        	
+        	
+        }
+        
+        
+        
+        
+        
+        
+        
+        
         // FIXME
         // END 
     }
