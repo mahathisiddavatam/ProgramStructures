@@ -7,7 +7,13 @@
  */
 package edu.neu.coe.info6205.union_find;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Height-weighted Quick Union with Path Compression
@@ -80,10 +86,34 @@ public class UF_HWQUPC implements UF {
      */
     public int find(int p) {
         validate(p);
-        int root = p;
-        // FIXME
-        // END 
-        return root;
+        if(pathCompression==false) {
+        	
+        	   if(parent[p]==p) {
+               	
+               	return p;
+               }
+               else {
+               	return find(parent[p]);
+               }
+        }
+        else {
+        	int root = p;
+            while (root != parent[root])
+                root = parent[root];
+            while (p != root) {
+                int newp = parent[p];
+                parent[p] = root;
+                p = newp;
+            }
+            return root;
+        }
+        
+        
+     
+        
+        
+        
+        
     }
 
     /**
@@ -171,13 +201,113 @@ public class UF_HWQUPC implements UF {
     private void mergeComponents(int i, int j) {
         // FIXME make shorter root point to taller one
         // END 
+    	
+    	int rooti = find(i);
+        int rootj = find(j);
+        if (rooti == rootj) return;
+
+        // make smaller root point to larger one
+        if (height[rooti] < height[rootj]) {
+            parent[rooti] = rootj;
+            height[rootj] += height[rooti];
+        }
+        else {
+            parent[rootj] = rooti;
+            height[rooti] += height[rooti];
+        }
+        count--;
     }
 
     /**
      * This implements the single-pass path-halving mechanism of path compression
      */
     private void doPathCompression(int i) {
-        // FIXME update parent to value of grandparent
-        // END 
+    	while(i!=parent[i]) {
+    		
+    		parent[i]=parent[parent[i]];
+    		i=parent[i];
+    		
+    	}
+        
+    }
+    
+    public static int count(int n) {
+    	UF_HWQUPC h = new UF_HWQUPC(n);
+    	int connections=0;
+    	int num1=0;
+    	int num2=0;
+    	int MAX_PAIRS = (n*(n-1))/2;
+    	int check_n_pairs=0;
+    	    	
+    	Random rand = new Random();
+    	//System.out.println("Max pairs= "+MAX_PAIRS);
+    	
+    	while(check_n_pairs<MAX_PAIRS) {
+    		
+    		num1 = rand.nextInt(n);
+        	num2 = rand.nextInt(n);
+        	check_n_pairs++;
+        	
+        	
+        	if(!(h.connected(num1,num2))) {
+        		
+        		
+    			
+    			if(num1!=num2) {
+    				
+    				h.union(num1, num2);
+    				//System.out.println(num1 +" connected to "+num2);
+    				
+    				connections++;
+    				
+    				
+    			}
+    			
+    			
+    			
+    			
+    		};
+    	}
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	return connections;
+    }
+   
+    	
+    	
+    		
+    	
+    	
+    	
+    	
+    	
+       
+    	
+    	
+    
+    public static void main(String[] args) {
+    	
+    	Scanner sc = new Scanner(System.in);
+    	
+    	while(true) {
+    		System.out.println("Enter n");
+        	
+        	int n = sc.nextInt();
+        	
+        	int connections = UF_HWQUPC.count(n);
+        	System.out.println("Number of connections = "+connections);
+    		
+    	}
+    	
+    	
+    	
+        //System.out.println(h.components() + " components");
     }
 }
+    
+    
