@@ -28,6 +28,7 @@ public class UF_HWQUPC implements UF {
     public void connect(int p, int q) {
         if (!isConnected(p, q)) union(p, q);
     }
+    
 
     /**
      * Initializes an empty union–find data structure with {@code n} sites
@@ -86,27 +87,30 @@ public class UF_HWQUPC implements UF {
      */
     public int find(int p) {
         validate(p);
-        if(pathCompression==false) {
+        int root=p;
+        
         	
-        	   if(parent[p]==p) {
+        	
+        	   /*if(parent[p]==p) {
                	
                	return p;
                }
                else {
                	return find(parent[p]);
-               }
-        }
-        else {
-        	int root = p;
-            while (root != parent[root])
-                root = parent[root];
-            while (p != root) {
-                int newp = parent[p];
-                parent[p] = root;
-                p = newp;
-            }
-            return root;
-        }
+               }*/
+        	
+        	while(root!=parent[root]) {
+        		
+        		if(pathCompression) {
+        			doPathCompression(p);
+        			
+        			
+        		}
+        		root = parent[root];
+        	}
+        	return root;
+        
+        
         
         
      
@@ -202,8 +206,8 @@ public class UF_HWQUPC implements UF {
         // FIXME make shorter root point to taller one
         // END 
     	
-    	int rooti = find(i);
-        int rootj = find(j);
+    	int rooti = parent[i];
+        int rootj = parent[j];
         if (rooti == rootj) return;
 
         // make smaller root point to larger one
@@ -213,9 +217,9 @@ public class UF_HWQUPC implements UF {
         }
         else {
             parent[rootj] = rooti;
-            height[rooti] += height[rooti];
+            height[rooti] += height[rootj];
         }
-        count--;
+        //count--;
     }
 
     /**
@@ -232,41 +236,22 @@ public class UF_HWQUPC implements UF {
     }
     
     public static int count(int n) {
-    	UF_HWQUPC h = new UF_HWQUPC(n);
+    	UF_HWQUPC h = new UF_HWQUPC(n,true);
     	int connections=0;
-    	int num1=0;
-    	int num2=0;
-    	int MAX_PAIRS = (n*(n-1))/2;
-    	int check_n_pairs=0;
     	    	
     	Random rand = new Random();
     	//System.out.println("Max pairs= "+MAX_PAIRS);
     	
-    	while(check_n_pairs<MAX_PAIRS) {
+    	while(h.components()>1) {
     		
-    		num1 = rand.nextInt(n);
-        	num2 = rand.nextInt(n);
-        	check_n_pairs++;
+    		int num1 = rand.nextInt(n);
+        	int num2 = rand.nextInt(n);
         	
+        	h.connect(num1,num2);
+        	connections++;
         	
-        	if(!(h.connected(num1,num2))) {
-        		
-        		
-    			
-    			if(num1!=num2) {
-    				
-    				h.union(num1, num2);
-    				//System.out.println(num1 +" connected to "+num2);
-    				
-    				connections++;
-    				
-    				
-    			}
-    			
-    			
-    			
-    			
-    		};
+              	
+        	
     	}
     	
     	
@@ -296,11 +281,20 @@ public class UF_HWQUPC implements UF {
     	
     	while(true) {
     		System.out.println("Enter n");
+    		int connections=0;
+    		int runs=0;
+    				
         	
         	int n = sc.nextInt();
         	
-        	int connections = UF_HWQUPC.count(n);
-        	System.out.println("Number of connections = "+connections);
+        	while(runs<100) {
+        		connections = connections + UF_HWQUPC.count(n);
+        		runs++;
+        		
+        		
+        	}
+        	
+        	System.out.println("Number of connections after running value 100 times = "+connections/100);
     		
     	}
     	
