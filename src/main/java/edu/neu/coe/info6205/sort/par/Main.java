@@ -18,12 +18,14 @@ public class Main {
 
     public static void main(String[] args) {
         processArgs(args);
-        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
+        //System.out.println("Degree of parallelism: " + ForkJoinPool.commonPool().getParallelism());
         Random random = new Random();
-        int[] array = new int[2000000];
+        int[] array = new int[120000];
         ArrayList<Long> timeList = new ArrayList<>();
+        System.out.println("Input size:"+array.length);
+        System.out.println("Thread count:16");
         for (int j = 50; j < 100; j++) {
-            ParSort.cutoff = 10000 * (j + 1);
+            ParSort.cutoff =1000 * (j + 1);
             // for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
             long time;
             long startTime = System.currentTimeMillis();
@@ -40,17 +42,18 @@ public class Main {
 
         }
         try {
-            FileOutputStream fis = new FileOutputStream("./src/result.csv");
+            FileOutputStream fis = new FileOutputStream("src/main/resources/result.csv");
             OutputStreamWriter isr = new OutputStreamWriter(fis);
             BufferedWriter bw = new BufferedWriter(isr);
-            int j = 0;
+            int j = 50;
             for (long i : timeList) {
-                String content = (double) 10000 * (j + 1) / 2000000 + "," + (double) i / 10 + "\n";
+                String content = (double) 1000 * (j + 1) + "," + (double) i + "\n";
                 j++;
                 bw.write(content);
                 bw.flush();
             }
             bw.close();
+            System.out.println("File created");
 
         } catch (IOException e) {
             e.printStackTrace();

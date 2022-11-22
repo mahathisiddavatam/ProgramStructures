@@ -1,15 +1,24 @@
 package edu.neu.coe.info6205.sort.par;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * This code has been fleshed out by Ziyao Qiao. Thanks very much.
  * TODO tidy it up a bit.
  */
 class ParSort {
+	
+	
 
     public static int cutoff = 1000;
+    public static ForkJoinPool myPool = new ForkJoinPool(16);
 
     public static void sort(int[] array, int from, int to) {
         if (to - from < cutoff) Arrays.sort(array, from, to);
@@ -37,20 +46,35 @@ class ParSort {
             });
 
             parsort.whenComplete((result, throwable) -> System.arraycopy(result, 0, array, from, result.length));
-//            System.out.println("# threads: "+ ForkJoinPool.commonPool().getRunningThreadCount());
+            //System.out.println("# threads: "+ ForkJoinPool.commonPool().getRunningThreadCount());
+//          
             parsort.join();
         }
     }
 
     private static CompletableFuture<int[]> parsort(int[] array, int from, int to) {
+    	
+    	
+    	
+    	//System.out.println("Degree of parallelism: " + myPool.getParallelism());
+    	
+    	
         return CompletableFuture.supplyAsync(
                 () -> {
                     int[] result = new int[to - from];
                     // TO IMPLEMENT
                     System.arraycopy(array, from, result, 0, result.length);
                     sort(result, 0, to - from);
+                    /*try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}*/
+                    
                     return result;
                 }
-        );
+        , myPool);
     }
+    
 }
